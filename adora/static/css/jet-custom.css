@@ -1,0 +1,28 @@
+/* jet-custom.css */
+.sidebar .sidebar-menu a {
+    color: #8e0e35 !important;
+}
+
+.sidebar {
+    background-color: #fff0f5 !important;
+}
+
+.navbar {
+    background-color: #ffcce0 !important;
+    border-bottom: 2px solid #8e0e35;
+}
+
+a, .btn-primary {
+    background-color: #8e0e35 !important;
+    border-color: #8e0e35 !important;
+}
+
+.module h2 {
+    color: #8e0e35;
+    font-weight: bold;
+}
+
+.module caption {
+    background-color: #8e0e35 !important;
+    color: white;
+}

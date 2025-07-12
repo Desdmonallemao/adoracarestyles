@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Ce que nos clients disent</h2>
+<div class="row">
+  {% for t in testimonials %}
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
+      {% if t.photo %}
+      <img src="{{ t.photo.url }}" class="card-img-top" style="height: 250px; object-fit: cover;">
+      {% endif %}
+      <div class="card-body">
+        <h5>{{ t.name }}</h5>
+        <p>⭐ {{ t.rating }} / 5</p>
+        <p>{{ t.message }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

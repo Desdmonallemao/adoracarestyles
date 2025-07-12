@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row">
+    <!-- Formulaire de commande -->
+    <div class="col-md-7">
+      <div class="card shadow border-0 mb-4">
+        <div class="card-header bg-success text-white text-center">
+          <h4 class="mb-0">🛒 Commander : {{ product.name }}</h4>
+        </div>
+        <div class="card-body">
+          <form method="post" id="orderForm" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="id_name" class="form-label fw-semibold">👤 Nom complet</label>
+              {{ form.name|add_class:"form-control" }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_phone" class="form-label fw-semibold">📞 Téléphone</label>
+              {{ form.phone|add_class:"form-control" }}
+              <div class="invalid-feedback">
+                Entrez un numéro de téléphone valide (ex : 6XXXXXXXX)
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="id_address" class="form-label fw-semibold">📍 Adresse de livraison</label>
+              {{ form.address|add_class:"form-control" }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_note" class="form-label fw-semibold">📝 Note (facultatif)</label>
+              {{ form.note|add_class:"form-control" }}
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-success btn-lg">
+                ✅ Valider la commande
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-center text-muted">
+          Paiement à la livraison | Livraison rapide 🇨🇲
+        </div>
+      </div>
+    </div>
+
+    <!-- Aperçu du produit -->
+    <div class="col-md-5">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="text-muted">{{ product.description|truncatewords:25 }}</p>
+          <h4 class="text-success fw-bold">{{ product.price|floatformat:0 }} FCFA</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS de validation téléphone -->
+<script>
+  (() => {
+    'use strict'
+    const form = document.querySelector('#orderForm')
+    const phoneInput = document.querySelector('#id_phone')
+    form.addEventListener('submit', event => {
+      const phone = phoneInput.value.trim()
+      const isValid = /^6\d{8}$/.test(phone)
+      if (!form.checkValidity() || !isValid) {
+        event.preventDefault()
+        event.stopPropagation()
+        phoneInput.classList.add('is-invalid')
+      } else {
+        phoneInput.classList.remove('is-invalid')
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })()
+</script>
+{% endblock %}

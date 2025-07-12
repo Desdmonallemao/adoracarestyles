@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load star_rating %}
+
+{% block title %}{{ product.name }} - Adora Care Style{% endblock %}
+{% block meta_description %}{{ product.description|truncatewords:25 }}{% endblock %}
+{% block og_title %}{{ product.name }} | Adora Care Style{% endblock %}
+{% block og_description %}{{ product.description|truncatewords:30 }}{% endblock %}
+{% block og_image %}
+  {% if product.images.first %}
+    {{ request.scheme }}://{{ request.get_host }}{{ product.images.first.image.url }}
+  {% else %}
+    {{ request.scheme }}://{{ request.get_host }}{% static 'images/default-product.jpg' %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row g-4 align-items-start">
+  <!-- Carrousel Images -->
+  <div class="col-lg-7 col-md-12">
+    {% if product.images.all %}
+    <div id="carouselImages" class="carousel slide rounded shadow-sm overflow-hidden" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for img in product.images.all %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <img src="{{ img.image.url }}" class="d-block w-100 full-img" alt="{{ product.name }}">
+        </div>
+        {% endfor %}
+      </div>
+      {% if product.images.count > 1 %}
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselImages" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+      {% endif %}
+    </div>
+    {% else %}
+    <img src="{% static 'images/default-product.jpg' %}" class="img-fluid rounded shadow-sm" alt="no image">
+    {% endif %}
+  </div>
+
+  <!-- Infos produit -->
+  <div class="col-lg-5 col-md-12 d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="fw-bold text-dark mb-0">{{ product.name }}</h2>
+      <h4 class="text-primary fw-semibold mb-0">{{ product.price|floatformat:0 }} FCFA</h4>
+    </div>
+
+    <p class="text-muted fs-6 mb-3">{{ product.description }}</p>
+
+    <p class="mb-2"><strong>Catégorie :</strong> {{ product.category.name }}</p>
+
+    <p class="text-warning mb-4">
+      Note moyenne :
+      <span style="font-size: 1.2em;">{% render_stars product.average_rating %}</span>
+      ({{ product.average_rating }}/5)
+    </p>
+
+    <div class="d-flex flex-column flex-sm-row gap-3 mt-auto">
+      <a class="btn btn-success flex-fill shadow-sm" target="_blank"
+         href="https://wa.me/237690389086?text=Bonjour%2C%20je%20souhaite%20commander%20le%20produit%20%3A%20{{ product.name|urlencode }}">
+        📦 Commander via WhatsApp
+      </a>
+      <a href="{% url 'order_product' product.id %}" class="btn btn-outline-primary flex-fill shadow-sm">
+        Commander à domicile
+      </a>
+    </div>
+
+    <!-- Bouton modale pour avis -->
+    <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#reviewModal">
+      Laisser un avis
+    </button>
+  </div>
+</div>
+
+<!-- Mini carrousel d’avis -->
+{% if approved_reviews %}
+<div id="carouselReviews" class="carousel slide mt-5" data-bs-ride="carousel" data-bs-interval="7000">
+  <h4 class="mb-4">Avis clients</h4>
+  <div class="carousel-inner">
+    {% for review in approved_reviews %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <div class="p-4 bg-light rounded shadow-sm mx-auto" style="max-width: 600px;">
+        <strong>{{ review.name }}</strong> &mdash;
+        <span style="color: #ffc107; font-size: 1.1em;">{% render_stars review.rating %}</span>
+        <small class="text-muted d-block mb-2">{{ review.created_at|date:"d M Y" }}</small>
+        <p class="fst-italic mb-0">« {{ review.comment }} »</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselReviews" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselReviews" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+{% endif %}
+
+<!-- Modale : Laisser un avis -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'submit_review' product.id %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="reviewModalLabel">Laisser un avis pour {{ product.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <div class="modal-body">
+          {{ review_form.as_p }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Partage -->
+<div class="mt-5">
+  <h6>Partager ce produit :</h6>
+  <a class="btn btn-success btn-sm me-1" href="https://wa.me/?text={{ request.build_absolute_uri|urlencode }}" target="_blank">
+    <i class="bi bi-whatsapp"></i> WhatsApp
+  </a>
+  <a class="btn btn-primary btn-sm me-1" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank">
+    <i class="bi bi-facebook"></i> Facebook
+  </a>
+  <a class="btn btn-danger btn-sm" href="https://www.instagram.com/" target="_blank">
+    <i class="bi bi-instagram"></i> Instagram
+  </a>
+</div>
+
+<!-- STYLES -->
+<style>
+  .full-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .btn-success {
+    background-color: #25d366;
+    border-color: #25d366;
+  }
+
+  .btn-success:hover {
+    background-color: #1ebe5d;
+    border-color: #1ebe5d;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #6f42c1;
+    color: white;
+    border-color: #6f42c1;
+  }
+
+  #carouselReviews .carousel-item {
+    text-align: center;
+  }
+
+  .modal-body input,
+  .modal-body textarea,
+  .modal-body select {
+    width: 100%;
+  }
+</style>
+{% endblock %}

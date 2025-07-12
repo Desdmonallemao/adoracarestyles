@@ -1,0 +1,20 @@
+✨ Découvrez nos produits phares chez Adora Care Style ✨
+
+{% for product in products %}
+🧴 {{ product.name }}
+📌 {{ product.description|truncatewords:20 }}
+💰 Prix : {{ product.price }} FCFA
+📲 Commandez maintenant sur WhatsApp 👉 https://wa.me/237690389086?text=Bonjour%2C%20je%20veux%20commander%20{{ product.name|urlencode }}
+
+{% endfor %}
+
+📦 Livraison à domicile
+💬 Contact WhatsApp : 690389086
+🔗 www.adoracarestyle.com (si disponible)
+
+#AdoraCareStyle #Cosmétiques #Cheveux #BeautéNaturelle #Promo
+
+id produit 1948270369319512
+
+jeton
+EAAOqNVSOqt4BPNrXkE3GhI1PvOw5yHHt7zH6T0R4ZCutAgXkFJYIWaPNyuFZBeBPRHzzWY6jxMt4DzchAP9VgynrehwEbUIRV1Imx59s1REDJON3ZC7cfNKM90ZB4Dj1bPoKXStj14fCSm3ruPVZCmdvERQSk7e9OgAbqhKXZBH4mDpQKDoAZBqvgRiZCxXROXbiI482GzBk78JHEpiVWI46Dk73EmNauEcfoT1GLczdFeCu9937LcpjIZC5BaryZAMQZDZD

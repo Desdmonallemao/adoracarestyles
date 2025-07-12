@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="alert alert-success shadow-lg">
+    <h3 class="mb-3">🎉 Merci pour votre commande !</h3>
+    <p><strong>{{ order.name }}</strong>, votre commande du produit <strong>{{ order.product.name }}</strong> a été bien enregistrée.</p>
+    <p>📦 Nous vous contacterons au <strong>{{ order.phone }}</strong> pour la livraison.</p>
+    <a href="https://wa.me/237690389086?text=Bonjour%2C+je+viens+de+passer+une+commande+sur+le+site+Adora+Care+Style." class="btn btn-success mt-3" target="_blank">
+      📲 Contacter le service client sur WhatsApp
+    </a>
+  </div>
+</div>
+{% endblock %}
