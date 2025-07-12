@@ -1,0 +1,23 @@
+# Python
+*.pyc
+__pycache__/
+
+# Environnement virtuel
+adora_venv/
+venv/
+env/
+
+# Django
+*.sqlite3
+db.json
+media/
+static/
+staticfiles/
+*.log
+
+# Environnement
+.env
+
+# OS
+.DS_Store
+Thumbs.db
