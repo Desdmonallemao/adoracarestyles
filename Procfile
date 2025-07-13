@@ -1,1 +1,0 @@
-web: gunicorn adora.wsgi --workers 4 --log-file -
